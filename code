@@ -1,0 +1,114 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+
+namespace MorseCodeTranslator
+{
+
+    public partial class Form1 : Form
+    {
+        // 
+        struct MorseCodeConvert
+        {
+            public string character;
+            public string morse;
+        }
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+
+        // To hold the letters and morse code
+        private List<MorseCodeConvert> morseCode = new List<MorseCodeConvert>();
+       
+
+
+        // Reads the file of MorseCode.txt and stores it into morseCode.
+        private void ReadFile()
+        {
+            try
+            {
+                StreamReader inputFile;    // Reads the file.
+                string line;                // Holds the line from the file.
+
+                MorseCodeConvert entry = new MorseCodeConvert();
+
+                // Delimter array.
+                char[] delim = { ',' };
+
+                // Opens the MorseCode file.
+                inputFile = File.OpenText("MorseCode.txt");
+
+                // Reads the lines from MorseCode.txt
+                while (!inputFile.EndOfStream)
+                {
+                    // Read a line from MorseCode.txt
+                    line = inputFile.ReadLine();
+
+                    // Tokens
+                    string[] tokens = line.Split(delim);
+
+                    // Store the tokens
+                    entry.character = tokens[0];
+                    entry.morse = tokens[1];
+
+                    // Add the entry tokens to the List.
+                    morseCode.Add(entry);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                // Error message
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Read the MorseCode.txt file.
+            ReadFile();
+
+        }
+
+
+
+        private void convertButton_Click(object sender, EventArgs e)
+        {
+
+            // Gets the user input and converts the inputted text to output to morse code.
+            string index = inputTextBox.Text;
+
+            // Display the correct morse code.
+            morseOutputLabel.Text = morseCode(index).morse;
+        
+            }
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            // Close the form.
+            this.Close();
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            // Clears the form.
+            inputTextBox.Text = "";
+            morseOutputLabel.Text = "";
+        }
+
+      
+
+        
+    }
+}
